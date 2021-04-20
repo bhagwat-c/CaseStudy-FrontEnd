@@ -21,25 +21,29 @@
             <li class="item"><a href="#home">Home</a></li>
             <li class="item"><a href="#services-container">Services</a></li>
             <li class="item"><a href="#contact">Contact us</a></li>
-            <li class="item"><a href="#logo.html">Login</a></li>
+            <li class="item"><a href="logo.html">Login</a></li>
 
         </ul>
     </nav>
     <section id="home">
-        <h1 class="h-primary">Book your appoinment online</h1>
+        <h1 class="h-primary center">
+            <a href="" class="typewrite" style="color: black; text-decoration: none;" data-period="1500" data-type='[ "Book your consultation now" ]'>
+              <span class="wrap"></span>
+            </a>
+          </h1>
         <p>
             Chat with a doctor privately. Talk to doctors online about your issues & 
             get answers. Get online
             consultation from verified doctors online.
             Talk to doctor on chat/call.
         </p>
-        <button class="btn">Book now</button>
+        <a href="Consultatio.html"><button class="btn">Book now</button></a>
     </section>
     <section id="services-container">
         <h1 class="h-primary center">Our Services</h1>
         <div id="services">
             <div class="box">
-                <img src="images/book.png" alt="">
+                <a href="Consultatio.html"><img src="images/book.png" alt=""></a>
                 <h2 class="h-secondary center">Book consultation</h2>
                 <p>Select preferred doctor and time slot to book an
                     in-click or video consultation</p>
@@ -91,15 +95,62 @@
 
     <script src="typed.js"></script>
     <script>
-        var typed = new Typed('.animate', {
-            strings: [
-                "book online appoinment",
-                "Order medecines"
-                ],
-            typeSpeed:50,
-            backSpeed:50,
-            loop:true
-        });
+        var TxtType = function(el, toRotate, period) {
+        this.toRotate = toRotate;
+        this.el = el;
+        this.loopNum = 0;
+        this.period = parseInt(period, 10) || 2000;
+        this.txt = '';
+        this.tick();
+        this.isDeleting = false;
+    };
+
+    TxtType.prototype.tick = function() {
+        var i = this.loopNum % this.toRotate.length;
+        var fullTxt = this.toRotate[i];
+
+        if (this.isDeleting) {
+        this.txt = fullTxt.substring(0, this.txt.length - 1);
+        } else {
+        this.txt = fullTxt.substring(0, this.txt.length + 1);
+        }
+
+        this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+
+        var that = this;
+        var delta = 200 - Math.random() * 100;
+
+        if (this.isDeleting) { delta /= 2; }
+
+        if (!this.isDeleting && this.txt === fullTxt) {
+        delta = this.period;
+        this.isDeleting = true;
+        } else if (this.isDeleting && this.txt === '') {
+        this.isDeleting = false;
+        this.loopNum++;
+        delta = 500;
+        }
+
+        setTimeout(function() {
+        that.tick();
+        }, delta);
+    };
+
+    window.onload = function() {
+        var elements = document.getElementsByClassName('typewrite');
+        for (var i=0; i<elements.length; i++) {
+            var toRotate = elements[i].getAttribute('data-type');
+            var period = elements[i].getAttribute('data-period');
+            if (toRotate) {
+              new TxtType(elements[i], JSON.parse(toRotate), period);
+            }
+        }
+        // INJECT CSS
+        var css = document.createElement("style");
+        css.type = "text/css";
+        css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
+        document.body.appendChild(css);
+    };
     </script>
 </body>
 
